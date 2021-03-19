@@ -1,6 +1,6 @@
 {
   "name": "floyd-warshall-shortest",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Implementation of Floy-Warshall's algorithm for finding shortest paths in a directed weighted graph.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
