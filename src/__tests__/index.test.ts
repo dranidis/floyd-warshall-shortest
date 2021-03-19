@@ -18,6 +18,22 @@ test('floyd-undirected', () => {
   expect(path).toEqual([0, 2, 4, 3]);
 });
 
+test('floyd-undirected with explicit nodes empty', () => {
+  const edges: Edge<number>[] = [
+    { from: 0, to: 1, weight: 4 },
+    { from: 2, to: 0, weight: 7 },
+    { from: 0, to: 3, weight: 16 },
+    { from: 1, to: 2, weight: 5 },
+    { from: 1, to: 3, weight: 10 },
+    { from: 2, to: 3, weight: 6 },
+    { from: 2, to: 4, weight: 1 },
+    { from: 4, to: 3, weight: 4 },
+  ];
+  const graph = new FloydWarshall([], edges, false);
+
+  const path = graph.getShortestPath(0, 3);
+  expect(path).toEqual([0, 2, 4, 3]);
+});
 test('floyd-undirected-inverse-is-equal', () => {
   const edges: Edge<number>[] = [
     { from: 0, to: 1, weight: 4 },
@@ -35,6 +51,22 @@ test('floyd-undirected-inverse-is-equal', () => {
   expect(path).toEqual([3, 4, 2, 0]);
 });
 
+test('floyd-directed with nodes empty', () => {
+  const edges: Edge<number>[] = [
+    { from: 0, to: 1, weight: 4 },
+    { from: 2, to: 0, weight: 7 },
+    { from: 0, to: 3, weight: 16 },
+    { from: 1, to: 2, weight: 5 },
+    { from: 1, to: 3, weight: 10 },
+    { from: 2, to: 3, weight: 6 },
+    { from: 2, to: 4, weight: 1 },
+    { from: 4, to: 3, weight: 4 },
+  ];
+  const graph = new FloydWarshall([], edges);
+
+  const path = graph.getShortestPath(0, 3);
+  expect(path).toEqual([0, 1, 3]);
+});
 test('floyd-directed', () => {
   const edges: Edge<number>[] = [
     { from: 0, to: 1, weight: 4 },
@@ -63,6 +95,34 @@ test('not connected', () => {
   expect(path).toEqual([]);
 });
 
+test('node not connected', () => {
+  const nodes = [0, 1, 2, 3];
+  const edges: Edge<number>[] = [
+    { from: 0, to: 1, weight: 4 },
+    { from: 1, to: 2, weight: 7 },
+  ];
+  const graph = new FloydWarshall(nodes, edges, false);
+
+  const path = graph.getShortestPath(0, 3);
+
+  expect(path).toEqual([]);
+});
+
+test('numberListToNodeList throws error with unknown node', () => {
+  const edges: Edge<number>[] = [
+    { from: 0, to: 1, weight: 4 },
+    { from: 2, to: 3, weight: 7 },
+  ];
+  const graph = new FloydWarshall(edges, false);
+
+  expect(() => {
+    // testing private method
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    graph.numberListToNodeList([0, 4]);
+  }).toThrow();
+});
+
 test('getShortestPath throws error with unknown node', () => {
   const edges: Edge<number>[] = [
     { from: 0, to: 1, weight: 4 },
@@ -72,6 +132,28 @@ test('getShortestPath throws error with unknown node', () => {
 
   expect(() => {
     graph.getShortestPath(0, 4);
+  }).toThrow();
+});
+
+test('constructor throws error with unknown from node', () => {
+  const edges: Edge<number>[] = [
+    { from: 0, to: 1, weight: 4 },
+    { from: 2, to: 3, weight: 7 },
+  ];
+
+  expect(() => {
+    new FloydWarshall([0, 1, 3], edges, false);
+  }).toThrow();
+});
+
+test('constructor throws error with unknown to node', () => {
+  const edges: Edge<number>[] = [
+    { from: 0, to: 1, weight: 4 },
+    { from: 2, to: 3, weight: 7 },
+  ];
+
+  expect(() => {
+    new FloydWarshall([0, 1, 2], edges, false);
   }).toThrow();
 });
 
