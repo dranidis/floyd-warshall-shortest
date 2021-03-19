@@ -18,43 +18,93 @@ export class FloydWarshall<T> {
   private node: Map<number, T> = new Map();
 
   /**
+   *
+   * @param edges
+   */
+  constructor(edges: Edge<T>[]);
+  /**
    * In a undirected graph provide only one of the symmetric edges. The other will be generated.
    *
    * @param edges a list of edge objects. Each edge is an object with from, to, and weight values.
    * @param directed True for directed graphs (default). False for undirected graphs.
    */
-  constructor(edges: Edge<T>[], directed = true) {
+  constructor(edges: Edge<T>[], directed: boolean);
+  /**
+   *
+   * @param nodes
+   * @param edges
+   */
+  constructor(nodes: T[], edges: Edge<T>[]);
+  /**
+   *
+   * @param nodes if the list is empty, nodes are inferred from edges
+   * @param edges
+   * @param directed
+   */
+  constructor(nodes: T[], edges: Edge<T>[], directed: boolean);
+  constructor(arg1: T[] | Edge<T>[], arg2?: boolean | Edge<T>[], arg3 = true) {
+    let nodes: T[] = [];
+    let edges: Edge<T>[] = [];
+    let directed = true;
+    if (arg1.length > 0) {
+      // arg1[0].hasOwnProperty('from'))
+      if (Object.prototype.hasOwnProperty.call(arg1[0], 'from')) {
+        edges = arg1 as Edge<T>[];
+        if (arg2 !== undefined) {
+          directed = arg2 as boolean;
+        }
+      } else {
+        nodes = arg1 as T[];
+        edges = arg2 as Edge<T>[];
+      }
+    } else {
+      if (Array.isArray(arg2)) {
+        edges = arg2;
+        directed = arg3;
+      } else {
+        if (arg2 !== undefined) {
+          directed = arg2;
+        }
+      }
+    }
+
     this.directed = directed;
-    const connections: Map<T, Map<T, number>> = new Map();
+
+    if (nodes.length === 0) nodes = this.getImplicitNodes(edges);
+
+    nodes.forEach((n) => {
+      this.nodeIndex.set(n, this.numNodes);
+      this.node.set(this.numNodes, n);
+      this.numNodes++;
+    });
+
     const numericalEdges: Edge<number>[] = [];
     edges.forEach((d) => {
-      if (!connections.has(d.from)) {
-        connections.set(d.from, new Map());
-        this.nodeIndex.set(d.from, this.numNodes);
-        this.node.set(this.numNodes, d.from);
-        this.numNodes++;
-      }
-      const fromMap = connections.get(d.from);
-      fromMap?.set(d.to, d.weight);
-
-      if (!connections.has(d.to)) {
-        connections.set(d.to, new Map());
-        this.nodeIndex.set(d.to, this.numNodes);
-        this.node.set(this.numNodes, d.to);
-        this.numNodes++;
-      }
-      const toMap = connections.get(d.to);
-      toMap?.set(d.from, d.weight);
+      const fromNode = this.nodeIndex.get(d.from);
+      if (fromNode === undefined) throw new Error('Node ' + fromNode + ' is not in list of nodes.');
+      const toNode = this.nodeIndex.get(d.to);
+      if (toNode === undefined) throw new Error('Node ' + toNode + ' is not in list of nodes.');
 
       numericalEdges.push({
-        from: this.nodeIndex.get(d.from) || 0,
-        to: this.nodeIndex.get(d.to) || 0,
+        from: fromNode,
+        to: toNode,
         weight: d.weight,
       });
     });
 
     this.initDistanceMatrix(numericalEdges);
     this.floydWarshall();
+  }
+
+  private getImplicitNodes(edges: Edge<T>[]): T[] {
+    const nodes: T[] = [];
+    edges.forEach((d) => {
+      const indexFrom = nodes.indexOf(d.from);
+      if (indexFrom < 0) nodes.push(d.from);
+      const indexTo = nodes.indexOf(d.to);
+      if (indexTo < 0) nodes.push(d.to);
+    });
+    return nodes;
   }
 
   private initDistanceMatrix(edges: Edge<number>[]): void {
@@ -121,13 +171,7 @@ export class FloydWarshall<T> {
     const fromNode = this.nodeIndex.get(from);
     const toNode = this.nodeIndex.get(to);
     if (fromNode !== undefined && toNode !== undefined) {
-      const path = this.shortestPath(fromNode, toNode);
-      const nodes: T[] = [];
-      path.forEach((p) => {
-        const node = this.node.get(p);
-        if (node !== undefined) nodes.push(node);
-      });
-      return nodes;
+      return this.numberListToNodeList(this.shortestPath(fromNode, toNode));
     } else {
       throw new Error('Unknown node');
     }
@@ -168,17 +212,20 @@ export class FloydWarshall<T> {
     const visitingNum: number[] = [];
     for (let i = 0; i < visiting.length; i++) {
       const num = this.nodeIndex.get(visiting[i]);
-      if (num === undefined) throw new Error('Unknown node');
+      if (num === undefined) throw new Error('Unknown node: ' + visiting[i]);
       visitingNum.push(num);
     }
 
-    const path = this.shortestVisitingPath(visitingNum);
-    const nodes: T[] = [];
-    for (let i = 0; i < path.length; i++) {
-      const node = this.node.get(path[i]);
-      if (node !== undefined) nodes.push(node);
-    }
+    return this.numberListToNodeList(this.shortestVisitingPath(visitingNum));
+  }
 
+  private numberListToNodeList(numbers: number[]): T[] {
+    const nodes: T[] = [];
+    for (let i = 0; i < numbers.length; i++) {
+      const node = this.node.get(numbers[i]);
+      if (node === undefined) throw new Error('Unknown node');
+      nodes.push(node);
+    }
     return nodes;
   }
 
