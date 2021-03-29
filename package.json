@@ -13,8 +13,8 @@
     "lint": "eslint . --ext .ts"
   },
   "keywords": [
-    "Floy-Warshall",
-    "Floy-Warshall's algorithm",
+    "Floyd-Warshall",
+    "Floyd-Warshall's algorithm",
     "shortest path",
     "graph"
   ],

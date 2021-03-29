@@ -89,10 +89,10 @@ const edges = [{ from: 'a', to: 'c', weight: 1 }];
  */
 
 // creates a directed graph with the explicit set of nodes and edges.
-const g2 = new FloydWarshall(nodes, edges);
+const g1 = new FloydWarshall(nodes, edges);
 
 // creates an undirected graph with the explicit set of nodes and edges.
-const g1 = new FloydWarshall(nodes, edges, false);
+const g2 = new FloydWarshall(nodes, edges, false);
 
 /**
  * FloydWarshall<T>(edges: Edge<T>[], directed = true)
@@ -105,5 +105,5 @@ const g1 = new FloydWarshall(nodes, edges, false);
 const g3 = new FloydWarshall(edges);
 
 // creates an undirected graph with the implicit set of nodes: {'a', 'c'}
-const g3 = new FloydWarshall(edges, false);
+const g4 = new FloydWarshall(edges, false);
 ```
