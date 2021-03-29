@@ -1,4 +1,4 @@
-import { permutator } from './permute';
+import { Permutation } from 'permutation-sjt';
 import { Edge } from './edge';
 
 export { Edge } from './edge';
@@ -178,10 +178,13 @@ export class FloydWarshall<T> {
   }
 
   private shortestVisitingPath(nodeArray: number[]): number[] {
-    const permutations = permutator(nodeArray);
+    const p = new Permutation(nodeArray.length);
+
     let bestPermutation: number[] = [];
     let bestDistance = Infinity;
-    permutations.forEach((permutation) => {
+
+    while (p.hasNext()) {
+      const permutation = p.next().map((i) => nodeArray[i]);
       let permutationDistance = 0;
       for (let i = 0; i < permutation.length - 1; i++) {
         permutationDistance += this.distance[permutation[i]][permutation[i + 1]];
@@ -190,7 +193,8 @@ export class FloydWarshall<T> {
         bestDistance = permutationDistance;
         bestPermutation = permutation;
       }
-    });
+    }
+
     let path: number[] = [];
     if (bestPermutation.length > 0) {
       path.push(bestPermutation[0]);

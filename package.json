@@ -1,6 +1,6 @@
 {
   "name": "floyd-warshall-shortest",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Implementation of Floy-Warshall's algorithm for finding shortest paths in a directed weighted graph.",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -16,7 +16,9 @@
     "Floyd-Warshall",
     "Floyd-Warshall's algorithm",
     "shortest path",
-    "graph"
+    "graph",
+    "directed graphs",
+    "weighted directed graphs"
   ],
   "repository": {
     "type": "git",
@@ -58,5 +60,7 @@
       "node"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "permutation-sjt": "^1.0.1"
+  }
 }
