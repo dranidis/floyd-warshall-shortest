@@ -1,6 +1,4 @@
 [![npm version](https://badge.fury.io/js/floyd-warshall-shortest.svg)](https://badge.fury.io/js/floyd-warshall-shortest)
-[![Build Status](https://travis-ci.com/dranidis/floyd-warshall-shortest.svg?branch=main)](https://travis-ci.com/dranidis/floyd-warshall-shortest)
-[![Coverage Status](https://coveralls.io/repos/github/dranidis/floyd-warshall-shortest/badge.svg)](https://coveralls.io/github/dranidis/floyd-warshall-shortest)
 [![Dependencies Status](https://status.david-dm.org/gh/dranidis/floyd-warshall-shortest.svg)](https://status.david-dm.org/gh/dranidis/floyd-warshall-shortest)
 
 # floyd-warshall-shortest
