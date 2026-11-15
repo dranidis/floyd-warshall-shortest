@@ -11,8 +11,8 @@ For more information read: https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_
 The package implements three functions returning
 
 - the shortestPath between two nodes
-- the shortestPath visiting all nodes in a list (in any order). This operation is quite slow for a long list of nodes (>10), since it evaluates all permutations.
 - the shortest distance between two nodes
+- the shortestPath visiting all nodes in a list (in any order). This operation is quite slow for a long list of nodes (>10), since it evaluates all permutations in a brute-force fashion. The complexity is O(n!).
 
 Undirected graphs are supported by passing false as the second parameter to the constructor. In this case, for each edge passed to the constructor its symmetric edge is also added to the graph.
 
