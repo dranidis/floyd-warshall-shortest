@@ -1,5 +1,4 @@
 [![npm version](https://badge.fury.io/js/floyd-warshall-shortest.svg)](https://badge.fury.io/js/floyd-warshall-shortest)
-[![Dependencies Status](https://status.david-dm.org/gh/dranidis/floyd-warshall-shortest.svg)](https://status.david-dm.org/gh/dranidis/floyd-warshall-shortest)
 
 # floyd-warshall-shortest
 
