@@ -208,6 +208,7 @@ export class FloydWarshall<T> {
 
   /**
    * Returns the shortest path (list of nodes) visiting all the nodes in the parameter list.
+   * Uses a brute-force method examining all permutations O(n!)
    *
    * @param visiting an array of nodes that have to be visited by the path
    * @returns a list of nodes (the shortest path)
